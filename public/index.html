@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Analyzer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Document Analyzer</h1>
+        
+        <div class="upload-section">
+            <form id="uploadForm">
+                <div class="drop-zone">
+                    <input type="file" id="fileInput" accept=".pdf" hidden>
+                    <div class="drop-zone-text">
+                        Drag & Drop PDF here or click to upload
+                    </div>
+                </div>
+                <button type="submit" id="analyzeBtn" disabled>Analyze Document</button>
+            </form>
+        </div>
+
+        <div id="results" class="results-section" style="display: none;">
+            <div class="result-card">
+                <h2>Document Analysis Results</h2>
+                <div class="document-type">
+                    <h3>Document Type:</h3>
+                    <p id="documentType"></p>
+                    <p id="confidence"></p>
+                </div>
+                <div class="missing-fields">
+                    <h3>Missing Fields:</h3>
+                    <ul id="missingFieldsList"></ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="spinner" class="spinner" style="display: none;">
+            <div class="spinner-inner"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
