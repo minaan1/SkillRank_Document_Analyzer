@@ -71,17 +71,64 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
 
             if (response.ok) {
+                console.log('Server Response:', data);
+                
                 // Update results
                 documentType.textContent = data.type.charAt(0).toUpperCase() + data.type.slice(1);
                 confidence.textContent = `Confidence: ${Math.round(data.confidence * 100)}%`;
                 
                 // Clear and update missing fields list
                 missingFieldsList.innerHTML = '';
-                data.missingFields.forEach(field => {
-                    const li = document.createElement('li');
-                    li.textContent = `${field.name} (${field.importance})`;
-                    missingFieldsList.appendChild(li);
-                });
+                if (data.missingFields && data.missingFields.length > 0) {
+                    data.missingFields.forEach(field => {
+                        const li = document.createElement('li');
+                        li.className = `missing-field ${field.importance}`;
+                        
+                        const fieldTitle = document.createElement('div');
+                        fieldTitle.className = 'field-title';
+                        fieldTitle.innerHTML = `
+                            <strong>${field.name.replace(/_/g, ' ').toUpperCase()}</strong>
+                            <span class="importance-badge ${field.importance}">${field.importance}</span>
+                        `;
+                        
+                        const fieldDetails = document.createElement('div');
+                        fieldDetails.className = 'field-details';
+
+                        if (field.recommendation && field.example && field.impact) {
+                            fieldDetails.innerHTML = `
+                                <div class="recommendation">
+                                    <strong>Recommendation:</strong> ${field.recommendation}
+                                </div>
+                                <div class="example">
+                                    <strong>Example:</strong> <pre>${field.example}</pre>
+                                </div>
+                                <div class="impact">
+                                    <strong>Impact:</strong> ${field.impact}
+                                </div>
+                            `;
+                        } else {
+                            fieldDetails.innerHTML = `
+                                <div class="no-recommendations">
+                                    <p>This field is missing from the document. Please add it to ensure completeness.</p>
+                                </div>
+                            `;
+                        }
+                        
+                        li.appendChild(fieldTitle);
+                        li.appendChild(fieldDetails);
+                        missingFieldsList.appendChild(li);
+                    });
+                } else {
+                    const noIssues = document.createElement('li');
+                    noIssues.className = 'no-issues';
+                    noIssues.innerHTML = `
+                        <div class="success-message">
+                            <i class="checkmark">✓</i>
+                            <p>All required fields are present in the document.</p>
+                        </div>
+                    `;
+                    missingFieldsList.appendChild(noIssues);
+                }
 
                 // Show results
                 results.style.display = 'block';

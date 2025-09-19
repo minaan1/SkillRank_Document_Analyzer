@@ -18,6 +18,11 @@ export async function analyzeDocument(req: Request, res: Response) {
 
     // Analyze missing fields
     const missingFields = await analyzeMissingFields(text, type);
+    
+    console.log('Document Analysis Results:');
+    console.log('Type:', type);
+    console.log('Confidence:', confidence);
+    console.log('Missing Fields:', JSON.stringify(missingFields, null, 2));
 
     // Store in database
     const db = await getDatabase();
@@ -28,20 +33,41 @@ export async function analyzeDocument(req: Request, res: Response) {
 
     const documentId = result.lastID;
 
-    // Store missing fields
-    for (const field of missingFields) {
-      await db.run(
-        'INSERT INTO missing_fields (document_id, field_name, importance) VALUES (?, ?, ?)',
-        [documentId, field.name, field.importance]
-      );
-    }
+    try {
+      // Store missing fields
+      for (const field of missingFields) {
+        await db.run(
+          'INSERT INTO missing_fields (document_id, field_name, importance, recommendation, example, impact) VALUES (?, ?, ?, ?, ?, ?)',
+          [
+            documentId,
+            field.name,
+            field.importance,
+            field.recommendation || '',  // Provide default values if undefined
+            field.example || '',
+            field.impact || ''
+          ]
+        );
+      }
 
-    res.json({
-      id: documentId,
-      type,
-      confidence,
-      missingFields
-    });
+      res.json({
+        id: documentId,
+        type,
+        confidence,
+        missingFields: missingFields.map(field => ({
+          name: field.name,
+          importance: field.importance,
+          recommendation: field.recommendation,
+          example: field.example,
+          impact: field.impact
+        }))
+      });
+    } catch (error: any) {
+      console.error('Database error:', error);
+      res.status(500).json({ 
+        error: 'Error storing document analysis results',
+        details: error.message || 'Unknown error'
+      });
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error processing document' });

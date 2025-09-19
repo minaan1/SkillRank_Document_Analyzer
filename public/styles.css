@@ -106,12 +106,115 @@ button:hover:not(:disabled) {
 }
 
 .missing-fields li {
-    padding: 0.5rem 0;
-    border-bottom: 1px solid #ecf0f1;
+    padding: 1rem;
+    border: 1px solid #ecf0f1;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .missing-fields li:last-child {
-    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.field-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.importance-badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.importance-badge.critical {
+    background-color: #ff4757;
+    color: white;
+}
+
+.importance-badge.optional {
+    background-color: #54a0ff;
+    color: white;
+}
+
+.field-details {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.field-details > div {
+    margin-bottom: 0.75rem;
+}
+
+.field-details > div:last-child {
+    margin-bottom: 0;
+}
+
+.recommendation {
+    color: #2c3e50;
+}
+
+.example {
+    background-color: #f8f9fa;
+    padding: 0.75rem;
+    border-radius: 4px;
+    border-left: 4px solid #3498db;
+}
+
+.example pre {
+    margin: 0.5rem 0 0;
+    white-space: pre-wrap;
+    font-family: monospace;
+    color: #34495e;
+}
+
+.impact {
+    color: #e74c3c;
+    font-style: italic;
+}
+
+.no-recommendations {
+    background-color: #fff3cd;
+    color: #856404;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-top: 0.5rem;
+}
+
+.no-issues {
+    text-align: center;
+    padding: 2rem;
+    background-color: #d4edda;
+    color: #155724;
+    border-radius: 8px;
+}
+
+.success-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.checkmark {
+    font-size: 2rem;
+    color: #28a745;
+}
+
+.critical {
+    border-left: 4px solid #dc3545;
+}
+
+.optional {
+    border-left: 4px solid #007bff;
 }
 
 .spinner {
